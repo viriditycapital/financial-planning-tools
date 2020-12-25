@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { React, Component } from 'reactn';
+import Nav from "./Nav.js"
+import Home from "./Home.js"
+import CompoundInterest from "./compound-interest/CompoundInterest.js"
+import "./App.css"
+import './data.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.setGlobal({
+      nav: "Home"
+    })
+  }
+
+  render() {
+    return (
+      <div className="app-container">
+        <Nav />
+
+        <div className="main">
+          {
+            {
+              "Home": <Home />,
+              "CompoundInterest": <CompoundInterest />
+            }[this.global.nav]
+          }
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;

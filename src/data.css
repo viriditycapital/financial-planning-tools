@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap');
+
+.data-table {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 18px;
+  color: #333;
+  border-spacing: 0;
+  text-align: right;
+}
+
+.data-table thead tr td {
+  background-color: #006400;
+  color: white;
+  padding: 5px 5px 5px 15px;
+}
+
+.data-table tbody tr td {
+  padding: 2px 10px 2px 20px;
+}
+
+.data-table tbody tr td:nth-child(odd) {
+  background-color: #ddeedd;
+}
+
+.button {
+  font-weight: 600;
+  display: inline-block;
+  cursor: pointer;
+  margin: 10px 10px 20px 10px;
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  transition: ease 0.2s;
+}
+
+.action-button {
+  background-color: #006400;
+  color: white;
+}
+
+.action-button:hover {
+  background-color: #208420;
+}
+
+.toggle-button {
+  background-color: white;
+  color: #333;
+  border: 2px solid #ddeedd;
+}
+
+.toggle-button:hover {
+  background-color: #ddeedd;
+}
+
+.toggle-button.selected {
+  background-color: #ddeedd;
+  color: black;
+}
+
+.input-table tr td:nth-child(even) {
+  padding-right: 40px;
+}
+
+.input-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.number-input {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 20px;
+  padding: 5px 10px;
+  margin: 5px 10px;
+  width: 100px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+}
+
+.select-input {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 16px;
+  padding: 5px 10px;
+  margin: 5px 10px;
+  width: 122px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+}
+
+
+
+.key-stats tr td:nth-child(1) {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #006400;
+}
+
+.key-stats tr td:nth-child(2) {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 36px;
+  padding-left: 20px;
+  color: #333;
+}
+
+/* .data-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #353;
+}
+
+.data-value {
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 24px;
+} */
