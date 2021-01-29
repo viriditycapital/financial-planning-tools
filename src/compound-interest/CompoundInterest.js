@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import calc_compound_interest_table from './calc.js'
+import CompoundInterestGraph from './CompoundInterestGraph'
 import CompoundInterestTable from './CompoundInterestTable'
 
 class CompoundInterest extends Component {
@@ -51,53 +52,57 @@ class CompoundInterest extends Component {
   }
 
   render() {
+    console.log(this.state.data)
+
     return (
       <div className="main-content">
         <h1>Compound Interest</h1>
 
         <table className="input-table">
-          <tr>
-            <td>
-              <label className="input-label">Initial Investment ($)</label> </td><td>
-              <input type="number" defaultValue={this.state.initial_amount} className="number-input"
-                onChange={e => this.update_value("initial_amount", Number(e.target.value))} />
-            </td>
-            <td>
-              <label className="input-label">Number of Years</label> </td><td>
-              <input type="number" defaultValue={this.state.num_years} className="number-input"
-                onChange={e => this.update_value("num_years", Number(e.target.value))} />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label className="input-label">Recurring Investment ($)</label> </td><td>
-              <input type="number" defaultValue={this.state.recurring_investment} className="number-input"
-                onChange={e => this.update_value("recurring_investment", Number(e.target.value))} />
-            </td>
-            <td>
-              <label className="input-label">Every</label> </td><td>
-              <select defaultValue={this.state.recurring_investment_period} className="select-input"
-                onChange={e => this.update_value('recurring_investment_period', e.target.value)}>
-                <option value="daily">Day</option>
-                <option value="weekly">Week</option>
-                <option value="biweekly">Two Weeks</option>
-                <option value="monthly">Month</option>
-                <option value="annually">Year</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label className="input-label">Interest Rate (%)</label> </td><td>
-              <input type="number" defaultValue={this.state.interest_rate * 100} className="number-input percentage"
-                onChange={e => this.update_value("interest_rate", Number(e.target.value) / 100)} />
-            </td>
-            <td>
-              <label className="input-label">Inflation Rate (%)</label> </td><td>
-              <input type="number" defaultValue={this.state.inflation_rate * 100} className="number-input percentage"
-                onChange={e => this.update_value("inflation_rate", Number(e.target.value) / 100)} />
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>
+                <label className="input-label">Initial Investment ($)</label> </td><td>
+                <input type="number" defaultValue={this.state.initial_amount} className="number-input"
+                  onChange={e => this.update_value("initial_amount", Number(e.target.value))} />
+              </td>
+              <td>
+                <label className="input-label">Number of Years</label> </td><td>
+                <input type="number" defaultValue={this.state.num_years} className="number-input"
+                  onChange={e => this.update_value("num_years", Number(e.target.value))} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label className="input-label">Recurring Investment ($)</label> </td><td>
+                <input type="number" defaultValue={this.state.recurring_investment} className="number-input"
+                  onChange={e => this.update_value("recurring_investment", Number(e.target.value))} />
+              </td>
+              <td>
+                <label className="input-label">Every</label> </td><td>
+                <select defaultValue={this.state.recurring_investment_period} className="select-input"
+                  onChange={e => this.update_value('recurring_investment_period', e.target.value)}>
+                  <option value="daily">Day</option>
+                  <option value="weekly">Week</option>
+                  <option value="biweekly">Two Weeks</option>
+                  <option value="monthly">Month</option>
+                  <option value="annually">Year</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label className="input-label">Interest Rate (%)</label> </td><td>
+                <input type="number" defaultValue={this.state.interest_rate * 100} className="number-input percentage"
+                  onChange={e => this.update_value("interest_rate", Number(e.target.value) / 100)} />
+              </td>
+              <td>
+                <label className="input-label">Inflation Rate (%)</label> </td><td>
+                <input type="number" defaultValue={this.state.inflation_rate * 100} className="number-input percentage"
+                  onChange={e => this.update_value("inflation_rate", Number(e.target.value) / 100)} />
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <br />
@@ -111,6 +116,14 @@ class CompoundInterest extends Component {
           onClick={() => this.toggle_value("display_detail_inflation")}>
           {this.state.display_detail_inflation ? <>&#9724;</> : <>&#9723;</>} Compare Against Today's Dollars</span>
 
+
+        {this.state.data &&
+          <CompoundInterestGraph
+            data={this.state.data}
+            display_detail_inflation={this.state.display_detail_inflation} />
+        }
+
+        <br />
         {this.state.data &&
           <CompoundInterestTable
             data={this.state.data}

@@ -53,14 +53,14 @@ export default function calc_compound_interest_table(
 
       compound_interest_data.push({
         year: year,
-        period: recurring_investment_period == "monthly" ? month_name[period - 1] : period,
+        period: recurring_investment_period === "monthly" ? month_name[period - 1] : period,
         amount_invested: current_amount_invested,
         value: current_value,
         returns: (current_value / current_amount_invested) - 1,
         amount_invested_in_todays_dollars: current_amount_invested_in_todays_dollars,
         value_in_todays_dollars: current_value_in_todays_dollars,
         returns_in_todays_dollars: (current_value_in_todays_dollars / current_amount_invested_in_todays_dollars) - 1,
-        end_of_year: period == ppy
+        end_of_year: period === ppy
       })
     }
   }
