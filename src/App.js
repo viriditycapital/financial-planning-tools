@@ -2,6 +2,7 @@ import { React, Component } from 'reactn';
 import Nav from "./Nav.js"
 import Home from "./Home.js"
 import CompoundInterest from "./compound-interest/CompoundInterest.js"
+import BuyVsRent from "./buy-vs-rent/BuyVsRent.js"
 import "./App.css"
 import './data.css';
 
@@ -23,7 +24,8 @@ class App extends Component {
           {
             {
               "Home": <Home />,
-              "CompoundInterest": <CompoundInterest />
+              "CompoundInterest": <CompoundInterest />,
+              "BuyVsRent": <BuyVsRent />
             }[this.global.nav]
           }
         </div>

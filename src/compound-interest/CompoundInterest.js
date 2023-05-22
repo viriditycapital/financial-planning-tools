@@ -52,8 +52,6 @@ class CompoundInterest extends Component {
   }
 
   render() {
-    console.log(this.state.data)
-
     return (
       <div className="main-content">
         <h1>Compound Interest</h1>

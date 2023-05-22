@@ -1,0 +1,13 @@
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.halfwidth {
+  width: 50%;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+}

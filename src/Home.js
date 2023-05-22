@@ -1,10 +1,6 @@
 import { React, Component } from 'reactn';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="main-content">
