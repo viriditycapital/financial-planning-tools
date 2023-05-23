@@ -61,14 +61,14 @@ export default function BuyVsRent() {
     }
   }, [equity, riskFree, down]);
 
-  const calculateMortgage  = useCallback(() => {
+  const calculateMortgage = useCallback(() => {
     const monthlyInterestRate = mortgageRate / (12 * 100);
     const totalPayments = mortgageLoanTerm * 12;
-    
+
     let principal = price - down;
     const numerator = principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalPayments);
     const denominator = Math.pow(1 + monthlyInterestRate, totalPayments) - 1;
-  
+
     const monthlyPayment = numerator / denominator;
 
     let payments = [];
@@ -83,7 +83,7 @@ export default function BuyVsRent() {
       );
       principal -= balance;
     }
-  
+
     return payments;
   }, [price, down, mortgageRate, mortgageLoanTerm])
 
@@ -96,8 +96,8 @@ export default function BuyVsRent() {
   }, [rent, rentersInsurance]);
 
   const getBuyCost = useCallback(() => {
-    return monthlyMortgage + tax + cc + (closing/12);
-  }, [price, down, mortgageRate, mortgageLoanTerm, tax, cc, closing, numYears]);
+    return monthlyMortgage + tax + cc;
+  }, [price, down, mortgageRate, mortgageLoanTerm, tax, cc]);
 
   const [rentCost, setRentCost] = useState(getRentCost())
   const [buyCost, setBuyCost] = useState(getBuyCost())
@@ -126,43 +126,43 @@ export default function BuyVsRent() {
         <div className="row">
           <label className="input-label">Equity</label>
           <input type="number" className="number-input" value={equity}
-            onChange={e => setEquity(e.target.value)}
+            onChange={e => setEquity(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Income</label>
           <input type="number" className="number-input" value={income}
-            onChange={e => setIncome(e.target.value)}
+            onChange={e => setIncome(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Tax Rate</label>
           <input type="number" className="number-input" value={taxRate}
-            onChange={e => setTaxRate(e.target.value)}
+            onChange={e => setTaxRate(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Risk-Free Rate (%)</label>
           <input type="number" className="number-input" value={riskFree}
-            onChange={e => setRiskFree(e.target.value)}
+            onChange={e => setRiskFree(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Mortgage Rate (%)</label>
           <input type="number" className="number-input" value={mortgageRate}
-            onChange={e => setMortgageRate(e.target.value)}
+            onChange={e => setMortgageRate(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Mortgage Loan Term (years)</label>
           <input type="number" className="number-input" value={mortgageLoanTerm}
-            onChange={e => setMortgageLoanTerm(e.target.value)}
+            onChange={e => setMortgageLoanTerm(parseInt(e.target.value))}
           />
         </div>
         <div className="row">
           <label className="input-label">Number of Years to Live</label>
           <input type="number" className="number-input" value={numYears}
-            onChange={e => setNumYears(e.target.value)}
+            onChange={e => setNumYears(parseInt(e.target.value))}
           />
         </div>
       </div>
@@ -173,25 +173,21 @@ export default function BuyVsRent() {
             <div className="row">
               <label className="input-label">Rent</label>
               <input type="number" className="number-input" value={rent}
-                onChange={e => setRent(e.target.value)}
+                onChange={e => setRent(parseInt(e.target.value))}
               />
             </div>
             <div className="row">
               <label className="input-label">Renter's Insurance</label>
               <input type="number" className="number-input" value={rentersInsurance}
-                onChange={e => setRentersInsurance(e.target.value)}
+                onChange={e => setRentersInsurance(parseInt(e.target.value))}
               />
-            </div>
-            <div className="row">
-              <label className="input-label">Equity Return</label>
-              <input type="number" className='number-input' disabled value={Math.round(equity * riskFree / (100 * 12))} />
             </div>
           </div>
           <div id="buy" className="col halfwidth">
             <div className="row">
               <label className="input-label">Condo or Co-op?</label>
               <select value={isCondo ? "Condo" : "Co-op"} className='number-input'
-                onChange={e => setIsCondo(e.target.value === "Condo")}
+                onChange={e => setIsCondo(parseInt(e.target.value) === "Condo")}
               >
                 <option value="Condo">Condo</option>
                 <option value="Co-op">Co-op</option>
@@ -200,14 +196,18 @@ export default function BuyVsRent() {
             <div className="row">
               <label className="input-label">Purchase Price</label>
               <input type="number" className="number-input" value={price}
-                onChange={e => setPrice(e.target.value)}
+                onChange={e => setPrice(parseInt(e.target.value))}
               />
             </div>
             <div className="row">
               <label className="input-label">Down Payment</label>
               <input type="number" className="number-input" value={down}
-                onChange={e => setDown(e.target.value)}
+                onChange={e => setDown(parseInt(e.target.value))}
               />
+            </div>
+            <div className="row">
+              <label className="input-label">Closing</label>
+              <input type="number" className="number-input" value={Math.round(closing)} disabled />
             </div>
             <div className="row">
               <label className="input-label">Mortgage</label>
@@ -217,22 +217,14 @@ export default function BuyVsRent() {
             <div className="row">
               <label className="input-label">Tax</label>
               <input type="number" className="number-input" value={tax}
-                onChange={e => setTax(e.target.value)}
+                onChange={e => setTax(parseInt(e.target.value))}
               />
             </div>
             <div className="row">
               <label className="input-label">CC/Maintenance</label>
               <input type="number" className="number-input" value={cc}
-                onChange={e => setCC(e.target.value)}
+                onChange={e => setCC(parseInt(e.target.value))}
               />
-            </div>
-            <div className="row">
-              <label className="input-label">Closing</label>
-              <input type="number" className="number-input" value={Math.round(closing / (12 * numYears))} disabled />
-            </div>
-            <div className="row">
-              <label className="input-label">Equity Return</label>
-              <input type="number" className="number-input" disabled value={Math.round((equity - down) * riskFree / (100 * 12))} />
             </div>
           </div>
         </div>
@@ -252,7 +244,7 @@ export default function BuyVsRent() {
         </div>
       </div>
       <h2>Equity and Income with Rent vs. Buy</h2>
-      <BVRTable mortgageData={mortgage} rent={rentCost} buyCosts={buyCost} equityRent={equity} equityBuy={equity-down} riskFree={riskFree} income={income} taxRate={taxRate} />
+      <BVRTable mortgageData={mortgage} rent={rentCost} buyCosts={buyCost} equityRent={equity} equityBuy={equity - down - closing} riskFree={riskFree} income={income} taxRate={taxRate} />
     </div >
   )
 };
