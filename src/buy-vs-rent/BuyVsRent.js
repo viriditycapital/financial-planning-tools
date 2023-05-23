@@ -187,7 +187,7 @@ export default function BuyVsRent() {
             <div className="row">
               <label className="input-label">Condo or Co-op?</label>
               <select value={isCondo ? "Condo" : "Co-op"} className='number-input'
-                onChange={e => setIsCondo(parseInt(e.target.value) === "Condo")}
+                onChange={e => setIsCondo(e.target.value === "Condo")}
               >
                 <option value="Condo">Condo</option>
                 <option value="Co-op">Co-op</option>
