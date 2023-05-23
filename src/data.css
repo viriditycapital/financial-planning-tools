@@ -76,6 +76,7 @@
   width: 100px;
   border: 1px solid #aaa;
   border-radius: 3px;
+  text-align: right;
 }
 
 .select-input {

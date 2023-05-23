@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import './buyrent.css';
+import BVRTable from './BVRTable';
 
 export default function BuyVsRent() {
   // Your own parameters
   const [equity, setEquity] = useState(500000);
   const [riskFree, setRiskFree] = useState(5);
   const [numYears, setNumYears] = useState(3);
+  const [income, setIncome] = useState(300000);
+  const [taxRate, setTaxRate] = useState(40);
 
   // Rent
   const [rent, setRent] = useState(3500);
@@ -17,6 +20,7 @@ export default function BuyVsRent() {
   const [tax, setTax] = useState(1000);
   const [cc, setCC] = useState(1000);
   const [mortgageRate, setMortgageRate] = useState(6);
+  const [mortgageLoanTerm, setMortgageLoanTerm] = useState(30);
   const [isCondo, setIsCondo] = useState(true);
 
   const getClosingCosts = useCallback((isCondo) => {
@@ -57,13 +61,43 @@ export default function BuyVsRent() {
     }
   }, [equity, riskFree, down]);
 
+  const calculateMortgage  = useCallback(() => {
+    const monthlyInterestRate = mortgageRate / (12 * 100);
+    const totalPayments = mortgageLoanTerm * 12;
+    
+    let principal = price - down;
+    const numerator = principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalPayments);
+    const denominator = Math.pow(1 + monthlyInterestRate, totalPayments) - 1;
+  
+    const monthlyPayment = numerator / denominator;
+
+    let payments = [];
+    for (let i = 0; i < totalPayments; i++) {
+      let interest = principal * monthlyInterestRate;
+      let balance = monthlyPayment - interest;
+      payments.push(
+        {
+          interest: interest,
+          balance: balance,
+        }
+      );
+      principal -= balance;
+    }
+  
+    return payments;
+  }, [price, down, mortgageRate, mortgageLoanTerm])
+
+  const [mortgage, setMortgage] = useState(calculateMortgage())
+
+  const monthlyMortgage = mortgage[0]['interest'] + mortgage[0]['balance'];
+
   const getRentCost = useCallback(() => {
-    return rent + rentersInsurance - getEquityReturn(true);
-  }, [rent, rentersInsurance, getEquityReturn]);
+    return rent + rentersInsurance;
+  }, [rent, rentersInsurance]);
 
   const getBuyCost = useCallback(() => {
-    return tax + cc + (closing/12) - getEquityReturn(false);
-  }, [tax, cc, closing, getEquityReturn]);
+    return monthlyMortgage + tax + cc + (closing/12);
+  }, [price, down, mortgageRate, mortgageLoanTerm, tax, cc, closing, numYears]);
 
   const [rentCost, setRentCost] = useState(getRentCost())
   const [buyCost, setBuyCost] = useState(getBuyCost())
@@ -74,11 +108,15 @@ export default function BuyVsRent() {
 
   useEffect(() => {
     setRentCost(getRentCost());
-  }, [rent, rentersInsurance, equity, riskFree, getRentCost]);
+  }, [rent, rentersInsurance, getRentCost]);
 
   useEffect(() => {
     setBuyCost(getBuyCost());
-  }, [price, down, tax, cc, closing, numYears, equity, riskFree, isCondo, getBuyCost]);
+  }, [price, down, tax, cc, closing, numYears, isCondo, getBuyCost]);
+
+  useEffect(() => {
+    setMortgage(calculateMortgage());
+  }, [price, down, mortgageRate, mortgageLoanTerm, calculateMortgage]);
 
   return (
     <div className="main-content">
@@ -89,6 +127,18 @@ export default function BuyVsRent() {
           <label className="input-label">Equity</label>
           <input type="number" className="number-input" value={equity}
             onChange={e => setEquity(e.target.value)}
+          />
+        </div>
+        <div className="row">
+          <label className="input-label">Income</label>
+          <input type="number" className="number-input" value={income}
+            onChange={e => setIncome(e.target.value)}
+          />
+        </div>
+        <div className="row">
+          <label className="input-label">Tax Rate</label>
+          <input type="number" className="number-input" value={taxRate}
+            onChange={e => setTaxRate(e.target.value)}
           />
         </div>
         <div className="row">
@@ -104,6 +154,12 @@ export default function BuyVsRent() {
           />
         </div>
         <div className="row">
+          <label className="input-label">Mortgage Loan Term (years)</label>
+          <input type="number" className="number-input" value={mortgageLoanTerm}
+            onChange={e => setMortgageLoanTerm(e.target.value)}
+          />
+        </div>
+        <div className="row">
           <label className="input-label">Number of Years to Live</label>
           <input type="number" className="number-input" value={numYears}
             onChange={e => setNumYears(e.target.value)}
@@ -111,8 +167,8 @@ export default function BuyVsRent() {
         </div>
       </div>
       <div className="comparison">
-        <h2>Comparison</h2>
-        <div className="row">
+        <h2>Comparison Monthly</h2>
+        <div className="container">
           <div id="rent" className="col halfwidth">
             <div className="row">
               <label className="input-label">Rent</label>
@@ -128,7 +184,7 @@ export default function BuyVsRent() {
             </div>
             <div className="row">
               <label className="input-label">Equity Return</label>
-              <input type="number" className='number-input' disabled value={(equity * riskFree / (100 * 12)).toFixed(2)} />
+              <input type="number" className='number-input' disabled value={Math.round(equity * riskFree / (100 * 12))} />
             </div>
           </div>
           <div id="buy" className="col halfwidth">
@@ -154,6 +210,11 @@ export default function BuyVsRent() {
               />
             </div>
             <div className="row">
+              <label className="input-label">Mortgage</label>
+              <input type="number" className="number-input" value={Math.round(monthlyMortgage)} disabled
+              />
+            </div>
+            <div className="row">
               <label className="input-label">Tax</label>
               <input type="number" className="number-input" value={tax}
                 onChange={e => setTax(e.target.value)}
@@ -167,11 +228,11 @@ export default function BuyVsRent() {
             </div>
             <div className="row">
               <label className="input-label">Closing</label>
-              <input type="number" className="number-input" value={(closing / (12 * numYears)).toFixed(2)} disabled />
+              <input type="number" className="number-input" value={Math.round(closing / (12 * numYears))} disabled />
             </div>
             <div className="row">
               <label className="input-label">Equity Return</label>
-              <input type="number" className="number-input" disabled value={((equity - down) * riskFree / (100 * 12)).toFixed(2)} />
+              <input type="number" className="number-input" disabled value={Math.round((equity - down) * riskFree / (100 * 12))} />
             </div>
           </div>
         </div>
@@ -179,21 +240,19 @@ export default function BuyVsRent() {
           <div className='col halfwidth'>
             <div className='row'>
               <label className="input-label">Total Cost</label>
-              <input type="number" className="number-input" disabled value={(rentCost).toFixed(2)} />
+              <input type="number" className="number-input" disabled value={Math.round(rentCost)} />
             </div>
           </div>
           <div className='col halfwidth'>
             <div className='row'>
               <label className="input-label">Total Cost</label>
-              <input type="number" className="number-input" disabled value={(buyCost).toFixed(2)} />
+              <input type="number" className="number-input" disabled value={Math.round(buyCost)} />
             </div>
           </div>
         </div>
       </div>
-      <div>
-        <h2>Equity Built</h2>
-        Graph here of equity built over time, and table
-      </div>
+      <h2>Equity and Income with Rent vs. Buy</h2>
+      <BVRTable mortgageData={mortgage} rent={rentCost} buyCosts={buyCost} equityRent={equity} equityBuy={equity-down} riskFree={riskFree} income={income} taxRate={taxRate} />
     </div >
   )
 };
