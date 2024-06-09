@@ -35,8 +35,6 @@ class CompoundInterest extends Component {
         this.state.recurring_investments.map((investment) => investment.amount),
         this.state.recurring_investments.map((investment) => investment.period)
       ),
-      recurring_investment_period_used_for_calc:
-        this.state.recurring_investment_period,
     });
   }
 
@@ -241,9 +239,6 @@ class CompoundInterest extends Component {
         {this.state.data && (
           <CompoundInterestTable
             data={this.state.data}
-            recurring_investment_period={
-              this.state.recurring_investment_period_used_for_calc
-            }
             display_detail_period={this.state.display_detail_period}
             display_detail_inflation={this.state.display_detail_inflation}
           />
