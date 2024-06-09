@@ -5,8 +5,6 @@
 @media (min-width: 50rem) {
   .main {
     position: relative;
-    max-width: 800px;
-    margin-left: 248px;
   }
 }
 
